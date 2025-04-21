@@ -26,7 +26,6 @@ import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
 import {
   useTable,
-  getComparator,
   emptyRows,
   TableNoData,
   TableEmptyRows,
@@ -35,24 +34,21 @@ import {
   TablePaginationCustom,
 } from '../../../components/table';
 // sections
-import { UserTableRow } from '../../../sections/@dashboard/user/list';
+import { AffiliateTableRow } from '../../../sections/@dashboard/affiliate/list';
 import axios from '../../../utils/axios';
-import { UserType } from 'src/@types/user';
 
 const TABLE_HEAD = [
   { id: 'fullName', label: 'Full Name', align: 'left' },
-  { id: 'level', label: 'Level', align: 'left' },
-  { id: 'tradeLink', label: 'Trade Link', align: 'left' },
-  { id: 'balance', label: 'Balance', align: 'left' },
-  { id: 'ip', label: 'IP', align: 'center' },
-  { id: 'deviceID', label: 'Device ID', align: 'center' },
-  { id: 'joinedDate', label: 'Joined Date', align: 'center' },
-  { id: '' },
+  { id: 'affiliateCode', label: 'Affiliate Code', align: 'left' },
+  { id: 'buyers', label: 'Buyers', align: 'right' },
+  { id: 'referrals', label: 'Referrals', align: 'right' },
+  { id: 'totalProfit', label: 'Total Profit', align: 'right' },
+  { id: '', align: 'right' },
 ];
 
-UserListPage.getLayout = (page: React.ReactElement) => <DashboardLayout>{page}</DashboardLayout>;
+AffiliateListPage.getLayout = (page: React.ReactElement) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default function UserListPage() {
+export default function AffiliateListPage() {
   const {
     dense,
     page,
@@ -76,28 +72,27 @@ export default function UserListPage() {
 
   const { push } = useRouter();
 
-  const [users, setUsers] = useState<UserType[]>([]);
+  const [users, setUsers] = useState<IAffiliate[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
-  const fetchUsers = async () => {
+  const fetchAffiliate = async () => {
     try {
       setIsLoading(true);
       setError('');
-      const res = await axios.post('get-users', {
+      const res = await axios.post('get-affiliate-list', {
         page,
         limit: rowsPerPage,
       });
-
       if (res.status === 200) {
-        setUsers(res.data.userData);
+        setUsers(res.data.affiliateData);
       } else {
         setError(res.data.message);
       }
     } catch (err) {
-      setError('Failed to fetch users');
+      setError('Failed to fetch affiliate list');
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -105,7 +100,7 @@ export default function UserListPage() {
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchAffiliate();
   }, []);
 
   const denseHeight = dense ? 52 : 72;
@@ -152,21 +147,21 @@ export default function UserListPage() {
   // Calculate dataInPage for proper pagination
 
   const handleEditRow = (id: string) => {
-    push(PATH_DASHBOARD.user.edit(paramCase(id)));
+    // push(PATH_DASHBOARD.affiliate.edit(paramCase(id)));
   };
 
   return (
     <>
       <Head>
-        <title> User: List | Steamupgrade Admin Dashboard</title>
+        <title> Affiliate: List | Steamupgrade Admin Dashboard</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="User List"
+          heading="Affiliate List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
+            { name: 'Affiliate', href: PATH_DASHBOARD.affiliate.root },
             { name: 'List' },
           ]}
           // action={
@@ -222,7 +217,7 @@ export default function UserListPage() {
                 <TableBody>
                   {users
                     .map((row) => (
-                      <UserTableRow
+                      <AffiliateTableRow
                         key={row._id}
                         row={row}
                         selected={selected.includes(row._id)}

@@ -22,21 +22,21 @@ import ConfirmDialog from '../../../../components/confirm-dialog';
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: UserType;
+  row: IAffiliate;
   selected: boolean;
   onEditRow: VoidFunction;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
 };
 
-export default function UserTableRow({
+export default function AffiliateTableRow({
   row,
   selected,
   onEditRow,
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { fullName, avatar, level, tradeLink, balance, ip, deviceID, joinedDate } = row;
+  const { fullName, avatar, affiliateCode, buyers, totalProfit, referrals } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -75,21 +75,15 @@ export default function UserTableRow({
           </Stack>
         </TableCell>
 
-        <TableCell align="right">{level}</TableCell>
-
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {tradeLink}
-        </TableCell>
+        <TableCell align="left">{affiliateCode}</TableCell>
 
         <TableCell align="right">
-          {balance}
+          {referrals}
         </TableCell>
 
-        <TableCell align="center">{ip}</TableCell>
+        <TableCell align="right">{buyers}</TableCell>
 
-        <TableCell align="center">{deviceID}</TableCell>
-
-        <TableCell align="center">{new Date(joinedDate * 1000).toLocaleDateString()}</TableCell>
+        <TableCell align="right">{totalProfit}</TableCell>
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>

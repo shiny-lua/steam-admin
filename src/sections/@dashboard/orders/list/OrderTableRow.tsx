@@ -22,22 +22,21 @@ import ConfirmDialog from '../../../../components/confirm-dialog';
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: UserType;
+  row: IOrder;
   selected: boolean;
   onEditRow: VoidFunction;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
 };
 
-export default function UserTableRow({
+export default function OrderTableRow({
   row,
   selected,
   onEditRow,
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { fullName, avatar, level, tradeLink, balance, ip, deviceID, joinedDate } = row;
-
+  const { offerId, fullName, avatar, userId, dreamLevel, estimatedCost, status, updatedAt } = row;
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
@@ -75,21 +74,16 @@ export default function UserTableRow({
           </Stack>
         </TableCell>
 
-        <TableCell align="right">{level}</TableCell>
-
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {tradeLink}
-        </TableCell>
+        <TableCell align="left">{offerId}</TableCell>
 
         <TableCell align="right">
-          {balance}
+          {dreamLevel}
         </TableCell>
 
-        <TableCell align="center">{ip}</TableCell>
+        <TableCell align="right">{estimatedCost}</TableCell>
 
-        <TableCell align="center">{deviceID}</TableCell>
-
-        <TableCell align="center">{new Date(joinedDate * 1000).toLocaleDateString()}</TableCell>
+        <TableCell align="right">{status}</TableCell>
+        <TableCell align="right">{updatedAt}</TableCell>
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
@@ -102,7 +96,7 @@ export default function UserTableRow({
         open={openPopover}
         onClose={handleClosePopover}
         arrow="right-top"
-        sx={{ width: 140 }}
+        sx={{ width: 140 }} 
       >
         <MenuItem
           onClick={() => {

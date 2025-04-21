@@ -33,6 +33,7 @@ const ICONS = {
   ecommerce: icon('ic_ecommerce'),
   analytics: icon('ic_analytics'),
   dashboard: icon('ic_dashboard'),
+  affiliate: icon('ic_affiliate'),
 };
 
 const navConfig = [
@@ -41,7 +42,7 @@ const navConfig = [
   {
     subheader: 'general',
     items: [
-      { title: 'overview', path: PATH_DASHBOARD.general.overview, icon: ICONS.ecommerce },
+      { title: 'overview', path: PATH_DASHBOARD.general.overview, icon: ICONS.dashboard },
       { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
       { title: 'banking', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
       { title: 'ordering', path: PATH_DASHBOARD.general.ordering, icon: ICONS.booking },
@@ -62,39 +63,29 @@ const navConfig = [
           // { title: 'profile', path: PATH_DASHBOARD.user.profile },
           // { title: 'cards', path: PATH_DASHBOARD.user.cards },
           { title: 'list', path: PATH_DASHBOARD.user.list },
-          // { title: 'create', path: PATH_DASHBOARD.user.new },
-          // { title: 'edit', path: PATH_DASHBOARD.user.demoEdit },
-          // { title: 'account', path: PATH_DASHBOARD.user.account },
+          { title: 'create', path: PATH_DASHBOARD.user.new },
+          { title: 'edit', path: PATH_DASHBOARD.user.demoEdit },
+          { title: 'account', path: PATH_DASHBOARD.user.account },
         ],
       },
 
-      // E-COMMERCE
-      // {
-      //   title: 'ecommerce',
-      //   path: PATH_DASHBOARD.eCommerce.root,
-      //   icon: ICONS.cart,
-      //   children: [
-      //     { title: 'shop', path: PATH_DASHBOARD.eCommerce.shop },
-      //     { title: 'product', path: PATH_DASHBOARD.eCommerce.demoView },
-      //     { title: 'list', path: PATH_DASHBOARD.eCommerce.list },
-      //     { title: 'create', path: PATH_DASHBOARD.eCommerce.new },
-      //     { title: 'edit', path: PATH_DASHBOARD.eCommerce.demoEdit },
-      //     { title: 'checkout', path: PATH_DASHBOARD.eCommerce.checkout },
-      //   ],
-      // },
+      {
+        title: 'affiliate',
+        path: PATH_DASHBOARD.affiliate.root,
+        icon: ICONS.affiliate,
+        children: [
+          { title: 'list', path: PATH_DASHBOARD.affiliate.list },
+        ],
+      },
 
-      // INVOICE
-      // {
-      //   title: 'invoice',
-      //   path: PATH_DASHBOARD.invoice.root,
-      //   icon: ICONS.invoice,
-      //   children: [
-      //     { title: 'list', path: PATH_DASHBOARD.invoice.list },
-      //     { title: 'details', path: PATH_DASHBOARD.invoice.demoView },
-      //     { title: 'create', path: PATH_DASHBOARD.invoice.new },
-      //     { title: 'edit', path: PATH_DASHBOARD.invoice.demoEdit },
-      //   ],
-      // },
+      {
+        title: 'orders',
+        path: PATH_DASHBOARD.orders.root,
+        icon: ICONS.ecommerce,
+        children: [
+          { title: 'list', path: PATH_DASHBOARD.orders.list },
+        ],
+      },
     ],
   },
 ];

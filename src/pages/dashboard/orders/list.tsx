@@ -26,7 +26,6 @@ import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
 import {
   useTable,
-  getComparator,
   emptyRows,
   TableNoData,
   TableEmptyRows,
@@ -35,24 +34,22 @@ import {
   TablePaginationCustom,
 } from '../../../components/table';
 // sections
-import { UserTableRow } from '../../../sections/@dashboard/user/list';
+import { OrderTableRow } from '../../../sections/@dashboard/orders/list';
 import axios from '../../../utils/axios';
-import { UserType } from 'src/@types/user';
 
 const TABLE_HEAD = [
+  { id: 'offerId', label: 'Offer ID', align: 'left' },
   { id: 'fullName', label: 'Full Name', align: 'left' },
-  { id: 'level', label: 'Level', align: 'left' },
-  { id: 'tradeLink', label: 'Trade Link', align: 'left' },
-  { id: 'balance', label: 'Balance', align: 'left' },
-  { id: 'ip', label: 'IP', align: 'center' },
-  { id: 'deviceID', label: 'Device ID', align: 'center' },
-  { id: 'joinedDate', label: 'Joined Date', align: 'center' },
-  { id: '' },
+  { id: 'dreamLevel', label: 'Dream Level', align: 'right' },
+  { id: 'estimatedCost', label: 'Estimated Cost', align: 'right' },
+  { id: 'status', label: 'Status', align: 'right' },
+  { id: 'updatedAt', label: 'Date', align: 'right' },
+  { id: '', align: 'right' },
 ];
 
-UserListPage.getLayout = (page: React.ReactElement) => <DashboardLayout>{page}</DashboardLayout>;
+OrderListPage.getLayout = (page: React.ReactElement) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default function UserListPage() {
+export default function OrderListPage() {
   const {
     dense,
     page,
@@ -76,28 +73,27 @@ export default function UserListPage() {
 
   const { push } = useRouter();
 
-  const [users, setUsers] = useState<UserType[]>([]);
+  const [orders, setOrders] = useState<IOrder[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
-  const fetchUsers = async () => {
+  const fetchAffiliate = async () => {
     try {
       setIsLoading(true);
       setError('');
-      const res = await axios.post('get-users', {
+      const res = await axios.post('get-order-list', {
         page,
         limit: rowsPerPage,
       });
-
       if (res.status === 200) {
-        setUsers(res.data.userData);
+        setOrders(res.data.orderData);
       } else {
         setError(res.data.message);
       }
     } catch (err) {
-      setError('Failed to fetch users');
+      setError('Failed to fetch order list');
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -105,7 +101,7 @@ export default function UserListPage() {
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchAffiliate();
   }, []);
 
   const denseHeight = dense ? 52 : 72;
@@ -121,10 +117,10 @@ export default function UserListPage() {
   const handleDeleteRow = async (id: string) => {
     try {
       await axios.post(`delete-user/${id}`);
-      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
+      setOrders((prevOrders) => prevOrders.filter((order) => order.id !== id));
       setSelected([]);
       
-      if (page > 0 && users.length - 1 <= page * rowsPerPage) {
+      if (page > 0 && orders.length - 1 <= page * rowsPerPage) {
         setPage(page - 1);
       }
     } catch (err) {
@@ -136,11 +132,11 @@ export default function UserListPage() {
   const handleDeleteRows = async (selectedIds: string[]) => {
     try {
       await Promise.all(selectedIds.map((id) => axios.post(`delete-user/${id}`)));
-      setUsers((prevUsers) => prevUsers.filter((user) => !selectedIds.includes(user._id)));
+      setOrders((prevOrders) => prevOrders.filter((order) => !selectedIds.includes(order.id)));
       setSelected([]);
       handleCloseConfirm();
       
-      if (page > 0 && users.length - selectedIds.length <= page * rowsPerPage) {
+      if (page > 0 && orders.length - selectedIds.length <= page * rowsPerPage) {
         setPage(page - 1);
       }
     } catch (err) {
@@ -158,15 +154,15 @@ export default function UserListPage() {
   return (
     <>
       <Head>
-        <title> User: List | Steamupgrade Admin Dashboard</title>
+        <title> Orders: List | Steamupgrade Admin Dashboard</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="User List"
+          heading="Orders List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
+            { name: 'Orders', href: PATH_DASHBOARD.orders.root },
             { name: 'List' },
           ]}
           // action={
@@ -186,11 +182,11 @@ export default function UserListPage() {
             <TableSelectedAction
               dense={dense}
               numSelected={selected.length}
-              rowCount={users.length}
+              rowCount={orders.length}
               onSelectAllRows={(checked) =>
                 onSelectAllRows(
                   checked,
-                  users.map((row) => row._id)
+                  orders.map((row) => row.id)
                 )
               }
               action={
@@ -208,43 +204,43 @@ export default function UserListPage() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={users.length}
+                  rowCount={orders.length}
                   numSelected={selected.length}
                   onSort={onSort}
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      users.map((row) => row._id)
+                        orders.map((row) => row.id)
                     )
                   }
                 />
 
                 <TableBody>
-                  {users
+                  {orders
                     .map((row) => (
-                      <UserTableRow
-                        key={row._id}
+                      <OrderTableRow
+                        key={row.id}
                         row={row}
-                        selected={selected.includes(row._id)}
-                        onSelectRow={() => onSelectRow(row._id)}
-                        onDeleteRow={() => handleDeleteRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
+                        selected={selected.includes(row.id)}
+                        onSelectRow={() => onSelectRow(row.id)}
+                        onDeleteRow={() => handleDeleteRow(row.id)}
+                        onEditRow={() => handleEditRow(row.id)}
                       />
                     ))}
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                    emptyRows={emptyRows(page, rowsPerPage, orders.length)}
                   />
 
-                  <TableNoData isNotFound={!isLoading && users.length === 0} />
+                  <TableNoData isNotFound={!isLoading && orders.length === 0} />
                 </TableBody>
               </Table>
             </Scrollbar>
           </TableContainer>
 
           <TablePaginationCustom
-            count={Math.ceil(users.length / rowsPerPage)}
+            count={Math.ceil(orders.length / rowsPerPage)}
             page={page}
             rowsPerPage={rowsPerPage}
             onPageChange={onChangePage}
