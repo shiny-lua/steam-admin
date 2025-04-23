@@ -10,6 +10,7 @@ import {
   TableCell,
   IconButton,
   Typography,
+  Link,
 } from '@mui/material';
 // @types
 import { UserType } from '../../../../@types/user';
@@ -36,7 +37,7 @@ export default function AffiliateTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { fullName, avatar, affiliateCode, buyers, totalProfit, referrals } = row;
+  const { id, fullName, avatar, affiliateCode, buyers, totalProfit, referrals } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -66,13 +67,15 @@ export default function AffiliateTableRow({
         </TableCell>
 
         <TableCell>
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={fullName} src={avatar} />
+          <Link href={`https://steamcommunity.com/profiles/${id}`} target="_blank" rel="noopener noreferrer" sx={{ color: 'text.primary' }}>
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <Avatar alt={fullName} src={avatar} />
 
-            <Typography variant="subtitle2" noWrap>
-              {fullName}
-            </Typography>
-          </Stack>
+              <Typography variant="subtitle2" noWrap sx={{ color: 'text.primary' }}>
+                {fullName}
+              </Typography>
+            </Stack>
+          </Link>
         </TableCell>
 
         <TableCell align="left">{affiliateCode}</TableCell>

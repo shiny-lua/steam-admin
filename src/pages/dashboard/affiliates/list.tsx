@@ -72,7 +72,7 @@ export default function AffiliateListPage() {
 
   const { push } = useRouter();
 
-  const [users, setUsers] = useState<IAffiliate[]>([]);
+  const [affiliates, setAffiliates] = useState<IAffiliate[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -87,7 +87,7 @@ export default function AffiliateListPage() {
         limit: rowsPerPage,
       });
       if (res.status === 200) {
-        setUsers(res.data.affiliateData);
+        setAffiliates(res.data.affiliateData);
       } else {
         setError(res.data.message);
       }
@@ -116,10 +116,10 @@ export default function AffiliateListPage() {
   const handleDeleteRow = async (id: string) => {
     try {
       await axios.post(`delete-user/${id}`);
-      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
+      setAffiliates((prevAffiliates) => prevAffiliates.filter((affiliate) => affiliate.id !== id));
       setSelected([]);
       
-      if (page > 0 && users.length - 1 <= page * rowsPerPage) {
+      if (page > 0 && affiliates.length - 1 <= page * rowsPerPage) {
         setPage(page - 1);
       }
     } catch (err) {
@@ -131,11 +131,11 @@ export default function AffiliateListPage() {
   const handleDeleteRows = async (selectedIds: string[]) => {
     try {
       await Promise.all(selectedIds.map((id) => axios.post(`delete-user/${id}`)));
-      setUsers((prevUsers) => prevUsers.filter((user) => !selectedIds.includes(user._id)));
+      setAffiliates((prevAffiliates) => prevAffiliates.filter((affiliate) => !selectedIds.includes(affiliate.id)));
       setSelected([]);
       handleCloseConfirm();
       
-      if (page > 0 && users.length - selectedIds.length <= page * rowsPerPage) {
+      if (page > 0 && affiliates.length - selectedIds.length <= page * rowsPerPage) {
         setPage(page - 1);
       }
     } catch (err) {
@@ -181,11 +181,11 @@ export default function AffiliateListPage() {
             <TableSelectedAction
               dense={dense}
               numSelected={selected.length}
-              rowCount={users.length}
+              rowCount={affiliates.length}
               onSelectAllRows={(checked) =>
                 onSelectAllRows(
                   checked,
-                  users.map((row) => row._id)
+                  affiliates.map((row) => row.id)
                 )
               }
               action={
@@ -203,43 +203,43 @@ export default function AffiliateListPage() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={users.length}
+                  rowCount={affiliates.length}
                   numSelected={selected.length}
                   onSort={onSort}
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      users.map((row) => row._id)
+                      affiliates.map((row) => row.id)
                     )
                   }
                 />
 
                 <TableBody>
-                  {users
+                  {affiliates
                     .map((row) => (
                       <AffiliateTableRow
-                        key={row._id}
+                        key={row.id}
                         row={row}
-                        selected={selected.includes(row._id)}
-                        onSelectRow={() => onSelectRow(row._id)}
-                        onDeleteRow={() => handleDeleteRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
+                        selected={selected.includes(row.id)}
+                        onSelectRow={() => onSelectRow(row.id)}
+                        onDeleteRow={() => handleDeleteRow(row.id)}
+                        onEditRow={() => handleEditRow(row.id)}
                       />
                     ))}
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                    emptyRows={emptyRows(page, rowsPerPage, affiliates.length)}
                   />
 
-                  <TableNoData isNotFound={!isLoading && users.length === 0} />
+                  <TableNoData isNotFound={!isLoading && affiliates.length === 0} />
                 </TableBody>
               </Table>
             </Scrollbar>
           </TableContainer>
 
           <TablePaginationCustom
-            count={Math.ceil(users.length / rowsPerPage)}
+            count={Math.ceil(affiliates.length / rowsPerPage)}
             page={page}
             rowsPerPage={rowsPerPage}
             onPageChange={onChangePage}

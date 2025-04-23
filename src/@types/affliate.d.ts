@@ -1,5 +1,5 @@
 declare interface IAffiliate {
-    _id: string;
+    id: string;
     fullName: string;
     affiliateCode: string;
     buyers: number;

@@ -10,6 +10,7 @@ import {
   TableCell,
   IconButton,
   Typography,
+  Link,
 } from '@mui/material';
 // @types
 import { UserType } from '../../../../@types/user';
@@ -36,7 +37,7 @@ export default function OrderTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { offerId, fullName, avatar, userId, dreamLevel, estimatedCost, status, updatedAt } = row;
+  const { id, fullName, avatar, userId, dreamLevel, estimatedCost, status, updatedAt } = row;
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
@@ -63,18 +64,18 @@ export default function OrderTableRow({
         <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
-
+        <TableCell align="left">{id}</TableCell>
         <TableCell>
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={fullName} src={avatar} />
+          <Link href={`https://steamcommunity.com/profiles/${userId}`} target="_blank" rel="noopener noreferrer">
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <Avatar alt={fullName} src={avatar} />
 
-            <Typography variant="subtitle2" noWrap>
-              {fullName}
-            </Typography>
-          </Stack>
+              <Typography variant="subtitle2" noWrap sx={{ color: 'text.primary' }}>
+                {fullName}
+              </Typography>
+            </Stack>
+          </Link>
         </TableCell>
-
-        <TableCell align="left">{offerId}</TableCell>
 
         <TableCell align="right">
           {dreamLevel}
@@ -82,7 +83,15 @@ export default function OrderTableRow({
 
         <TableCell align="right">{estimatedCost}</TableCell>
 
-        <TableCell align="right">{status}</TableCell>
+        <TableCell align="right">
+          <Label
+            variant="soft"
+            color={(status === 'failed' && 'error') || (status === 'pending' && 'warning') || (status === 'expired' && 'info') || 'success'}
+            sx={{ textTransform: 'capitalize' }}
+          >
+            {status}
+          </Label>
+        </TableCell>
         <TableCell align="right">{updatedAt}</TableCell>
 
         <TableCell align="right">
@@ -96,7 +105,7 @@ export default function OrderTableRow({
         open={openPopover}
         onClose={handleClosePopover}
         arrow="right-top"
-        sx={{ width: 140 }} 
+        sx={{ width: 140 }}
       >
         <MenuItem
           onClick={() => {

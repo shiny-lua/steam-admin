@@ -121,7 +121,7 @@ export default function UserListPage() {
   const handleDeleteRow = async (id: string) => {
     try {
       await axios.post(`delete-user/${id}`);
-      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
+      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
       setSelected([]);
       
       if (page > 0 && users.length - 1 <= page * rowsPerPage) {
@@ -136,7 +136,7 @@ export default function UserListPage() {
   const handleDeleteRows = async (selectedIds: string[]) => {
     try {
       await Promise.all(selectedIds.map((id) => axios.post(`delete-user/${id}`)));
-      setUsers((prevUsers) => prevUsers.filter((user) => !selectedIds.includes(user._id)));
+      setUsers((prevUsers) => prevUsers.filter((user) => !selectedIds.includes(user.id)));
       setSelected([]);
       handleCloseConfirm();
       
@@ -190,7 +190,7 @@ export default function UserListPage() {
               onSelectAllRows={(checked) =>
                 onSelectAllRows(
                   checked,
-                  users.map((row) => row._id)
+                  users.map((row) => row.id)
                 )
               }
               action={
@@ -214,7 +214,7 @@ export default function UserListPage() {
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      users.map((row) => row._id)
+                      users.map((row) => row.id)
                     )
                   }
                 />
@@ -223,12 +223,12 @@ export default function UserListPage() {
                   {users
                     .map((row) => (
                       <UserTableRow
-                        key={row._id}
+                        key={row.id}
                         row={row}
-                        selected={selected.includes(row._id)}
-                        onSelectRow={() => onSelectRow(row._id)}
-                        onDeleteRow={() => handleDeleteRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
+                        selected={selected.includes(row.id)}
+                        onSelectRow={() => onSelectRow(row.id)}
+                        onDeleteRow={() => handleDeleteRow(row.id)}
+                        onEditRow={() => handleEditRow(row.id)}
                       />
                     ))}
 

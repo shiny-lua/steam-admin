@@ -38,7 +38,7 @@ import { OrderTableRow } from '../../../sections/@dashboard/orders/list';
 import axios from '../../../utils/axios';
 
 const TABLE_HEAD = [
-  { id: 'offerId', label: 'Offer ID', align: 'left' },
+  { id: 'orderId', label: 'Order ID', align: 'left' },
   { id: 'fullName', label: 'Full Name', align: 'left' },
   { id: 'dreamLevel', label: 'Dream Level', align: 'right' },
   { id: 'estimatedCost', label: 'Estimated Cost', align: 'right' },
@@ -88,7 +88,7 @@ export default function OrderListPage() {
         limit: rowsPerPage,
       });
       if (res.status === 200) {
-        setOrders(res.data.orderData);
+        setOrders(res.data.ordersData);
       } else {
         setError(res.data.message);
       }
