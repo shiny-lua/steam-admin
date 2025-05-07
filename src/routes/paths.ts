@@ -67,6 +67,11 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/orders'),
     list: path(ROOTS_DASHBOARD, '/orders/list'),
   },
+  claims: {
+    root: path(ROOTS_DASHBOARD, '/claims'),
+    list: path(ROOTS_DASHBOARD, '/claims/list'),
+    send: (id: string) => path(ROOTS_DASHBOARD, `/claims/${id}/send`),
+  },
 };
 
 export const PATH_DOCS = {

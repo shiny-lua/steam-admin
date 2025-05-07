@@ -19,25 +19,26 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
+import { textEllipsis } from 'src/utils/utils';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IOrder;
+  row: IClaim;
   selected: boolean;
   onEditRow: VoidFunction;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
 };
 
-export default function OrderTableRow({
+export default function ClaimableRow({
   row,
   selected,
   onEditRow,
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { id, fullName, avatar, userId, dreamLevel, estimatedCost, status, updatedAt } = row;
+  const { id, fullName, amount, userId, address, network, avatar, status, updatedAt } = row;
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
@@ -77,13 +78,12 @@ export default function OrderTableRow({
           </Link>
         </TableCell>
 
-        <TableCell align="right">
-          {dreamLevel}
-        </TableCell>
+        <TableCell align="right">${amount}</TableCell>
 
-        <TableCell align="right">{estimatedCost}</TableCell>
+        <TableCell align="center">{textEllipsis(address)}</TableCell>
+        <TableCell align="left">{network}</TableCell>
 
-        <TableCell align="right">
+        <TableCell align="center">
           <Label
             variant="soft"
             color={(status === 'failed' && 'error') || (status === 'pending' && 'warning') || (status === 'expired' && 'info') || 'success'}
@@ -124,8 +124,8 @@ export default function OrderTableRow({
             handleClosePopover();
           }}
         >
-          <Iconify icon="eva:edit-fill" />
-          Edit
+          <Iconify icon="mdi:send-variant" />
+          Send
         </MenuItem>
       </MenuPopover>
 

@@ -48,25 +48,7 @@ export default function GeneralBookingPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={4}>
-            <BookingWidgetSummary
-              title="Total Ordering"
-              total={714000}
-              icon={<BookingIllustration />}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <BookingWidgetSummary title="Check In" total={311000} icon={<CheckInIllustration />} />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <BookingWidgetSummary
-              title="Check Out"
-              total={124000}
-              icon={<CheckOutIllustration />}
-            />
-          </Grid>
+          
 
           <Grid item xs={12} md={8}>
             <Grid container spacing={3}>
@@ -109,40 +91,6 @@ export default function GeneralBookingPage() {
               }}
             />
           </Grid>
-
-          <Grid item xs={12}>
-            <BookingReservationStats
-              title="Reservation Stats"
-              subheader="(+43% Check In | +12% Check Out) than last year"
-              chart={{
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-                series: [
-                  {
-                    type: 'Week',
-                    data: [
-                      { name: 'Check In', data: [10, 41, 35, 151, 49, 62, 69, 91, 48] },
-                      { name: 'Check Out', data: [10, 34, 13, 56, 77, 88, 99, 77, 45] },
-                    ],
-                  },
-                  {
-                    type: 'Month',
-                    data: [
-                      { name: 'Check In', data: [148, 91, 69, 62, 49, 51, 35, 41, 10] },
-                      { name: 'Check Out', data: [45, 77, 99, 88, 77, 56, 13, 34, 10] },
-                    ],
-                  },
-                  {
-                    type: 'Year',
-                    data: [
-                      { name: 'Check In', data: [76, 42, 29, 41, 27, 138, 117, 86, 63] },
-                      { name: 'Check Out', data: [80, 55, 34, 114, 80, 130, 15, 28, 55] },
-                    ],
-                  },
-                ],
-              }}
-            />
-          </Grid>
-
           
           <Grid item xs={12}>
             <BookingDetails

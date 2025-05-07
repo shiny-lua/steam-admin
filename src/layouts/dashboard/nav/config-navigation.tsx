@@ -34,6 +34,7 @@ const ICONS = {
   analytics: icon('ic_analytics'),
   dashboard: icon('ic_dashboard'),
   affiliate: icon('ic_affiliate'),
+  claim: icon('ic_claim'),
 };
 
 const navConfig = [
@@ -43,8 +44,6 @@ const navConfig = [
     subheader: 'general',
     items: [
       { title: 'overview', path: PATH_DASHBOARD.general.overview, icon: ICONS.dashboard },
-      { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
-      { title: 'banking', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
       { title: 'ordering', path: PATH_DASHBOARD.general.ordering, icon: ICONS.booking },
     ],
   },
@@ -84,6 +83,15 @@ const navConfig = [
         icon: ICONS.ecommerce,
         children: [
           { title: 'list', path: PATH_DASHBOARD.orders.list },
+        ],
+      },
+
+      {
+        title: 'claims',
+        path: PATH_DASHBOARD.claims.root,
+        icon: ICONS.claim,
+        children: [
+          { title: 'list', path: PATH_DASHBOARD.claims.list },
         ],
       },
     ],

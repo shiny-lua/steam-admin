@@ -18,20 +18,18 @@ import {
 import { useSettingsContext } from '../../components/settings';
 // sections
 import {
-  EcommerceNewProducts,
   EcommerceYearlySales,
   EcommerceBestSalesman,
   EcommerceSaleByGender,
   EcommerceWidgetSummary,
   EcommerceSalesOverview,
-  EcommerceLatestProducts,
   EcommerceCurrentBalance,
 } from '../../sections/@dashboard/general/overview';
-import { AppWelcome, AppWidgetSummary } from '../../sections/@dashboard/general/app';
-// assets
-import { MotivationIllustration } from '../../assets/illustrations';
+import { AppWidgetSummary } from '../../sections/@dashboard/general/app';
+import { AnalyticsWebsiteVisits } from 'src/sections/@dashboard/general/analytics';
+import { BookingWidgetSummary } from 'src/sections/@dashboard/general/booking';
+import { BookingIllustration, CheckInIllustration, CheckOutIllustration } from 'src/assets/illustrations';
 
-// ----------------------------------------------------------------------
 
 GeneralEcommercePage.getLayout = (page: React.ReactElement) => (
   <DashboardLayout>{page}</DashboardLayout>
@@ -61,23 +59,12 @@ export default function GeneralEcommercePage() {
               total={18765}
               chart={{
                 colors: [theme.palette.primary.main],
-                series: [5, 18, 12, 51, 68, 11, 39, 37, 27, 20],
+                series: [100],
               }}
             />
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <AppWidgetSummary
-              title="Total invited Users"
-              percent={0.2}
-              total={4876}
-              chart={{
-                colors: [theme.palette.info.main],
-                series: [20, 41, 63, 33, 28, 35, 50, 46, 11, 26],
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
 
             <EcommerceWidgetSummary
               title="Total Orders"
@@ -91,26 +78,65 @@ export default function GeneralEcommercePage() {
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <EcommerceWidgetSummary
-              title="Total Balance"
-              percent={-0.1}
-              total={18765}
-              chart={{
-                colors: [theme.palette.info.main],
-                series: [56, 47, 40, 62, 73, 30, 23, 54, 67, 68],
-              }}
+            <BookingWidgetSummary
+              title="Total Ordering"
+              total={714000}
+              icon={<BookingIllustration />}
             />
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <EcommerceWidgetSummary
-              title="Sales Profit"
-              percent={0.6}
-              total={4876}
+            <BookingWidgetSummary title="Check In" total={311000} icon={<CheckInIllustration />} />
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <BookingWidgetSummary
+              title="Check Out"
+              total={124000}
+              icon={<CheckOutIllustration />}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <AnalyticsWebsiteVisits
+              title="Website Visits"
+              subheader="(+43%) than last year"
               chart={{
-                colors: [theme.palette.warning.main],
-                series: [40, 70, 75, 70, 50, 28, 7, 64, 38, 27],
+                labels: [
+                  '01-1-2025',
+                  '02-1-2025',
+                  '03-1-2025',
+                  '04-1-2025',
+                  '05-1-2025',
+                  '06-1-2025',
+                  '07-1-2025',
+                  '08-1-2025',
+                  '09-1-2025',
+                  '10-1-2025',
+                  '11-1-2025',
+                ],
+                series: [
+                  {
+                    name: 'visiters',
+                    type: 'area',
+                    fill: 'gradient',
+                    data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+                  },
+                ],
               }}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={12}>
+            <EcommerceBestSalesman
+              title="Best Customers"
+              tableData={_ecommerceBestSalesman}
+              tableLabels={[
+                { id: 'customer', label: 'Customer' },
+                { id: 'level', label: 'Level' },
+                { id: 'total', label: 'Total' },
+                { id: 'rank', label: 'Rank', align: 'right' },
+              ]}
             />
           </Grid>
 
@@ -148,31 +174,6 @@ export default function GeneralEcommercePage() {
                   },
                 ],
               }}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={8}>
-            <EcommerceSalesOverview title="Sales Overview" data={_ecommerceSalesOverview} />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <EcommerceCurrentBalance
-              title="Current Balance"
-              currentBalance={187650}
-              sentAmount={25500}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={12}>
-            <EcommerceBestSalesman
-              title="Best Customers"
-              tableData={_ecommerceBestSalesman}
-              tableLabels={[
-                { id: 'customer', label: 'Customer' },
-                { id: 'level', label: 'Level' },
-                { id: 'total', label: 'Total' },
-                { id: 'rank', label: 'Rank', align: 'right' },
-              ]}
             />
           </Grid>
         </Grid>
