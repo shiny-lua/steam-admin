@@ -1,8 +1,6 @@
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
-import Label from '../../../components/label';
-import Iconify from '../../../components/iconify';
 import SvgColor from '../../../components/svg-color';
 
 // ----------------------------------------------------------------------
@@ -44,7 +42,6 @@ const navConfig = [
     subheader: 'general',
     items: [
       { title: 'overview', path: PATH_DASHBOARD.general.overview, icon: ICONS.dashboard },
-      { title: 'ordering', path: PATH_DASHBOARD.general.ordering, icon: ICONS.booking },
     ],
   },
 
@@ -67,7 +64,7 @@ const navConfig = [
           { title: 'account', path: PATH_DASHBOARD.user.account },
         ],
       },
-
+      
       {
         title: 'affiliate',
         path: PATH_DASHBOARD.affiliate.root,
@@ -87,11 +84,11 @@ const navConfig = [
       },
 
       {
-        title: 'claims',
-        path: PATH_DASHBOARD.claims.root,
+        title: 'referral rewards',
+        path: PATH_DASHBOARD.rewards.root,
         icon: ICONS.claim,
         children: [
-          { title: 'list', path: PATH_DASHBOARD.claims.list },
+          { title: 'list', path: PATH_DASHBOARD.rewards.list },
         ],
       },
     ],

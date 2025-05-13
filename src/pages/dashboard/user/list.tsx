@@ -92,7 +92,7 @@ export default function UserListPage() {
       });
 
       if (res.status === 200) {
-        setUsers(res.data.userData);
+        setUsers(res.data.data);
       } else {
         setError(res.data.message);
       }

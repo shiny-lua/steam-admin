@@ -27,25 +27,14 @@ import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
 import MenuPopover from '../../../../components/menu-popover';
 import { TableHeadCustom } from '../../../../components/table';
-
-// ----------------------------------------------------------------------
-
-type RowProps = {
-  id: string;
-  name: string;
-  avatar: string;
-  checkIn: Date | string | number;
-  checkOut: Date | string | number;
-  current_level: string;
-  dream_level: string;
-  status: string;
-};
+import { textEllipsis } from 'src/utils/utils';
+import router from 'next/router';
 
 interface Props extends CardProps {
   title?: string;
   subheader?: string;
   tableLabels: any;
-  tableData: RowProps[];
+  tableData: IRewardRequest[];
 }
 
 export default function BookingDetails({
@@ -79,6 +68,9 @@ export default function BookingDetails({
         <Button
           size="small"
           color="inherit"
+          onClick={() => {
+            router.push(`/dashboard/rewards/list`);
+          }}
           endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
         >
           View All
@@ -88,10 +80,8 @@ export default function BookingDetails({
   );
 }
 
-// ----------------------------------------------------------------------
-
 type BookingDetailsRowProps = {
-  row: RowProps;
+  row: IRewardRequest;
 };
 
 function BookingDetailsRow({ row }: BookingDetailsRowProps) {
@@ -109,21 +99,6 @@ function BookingDetailsRow({ row }: BookingDetailsRowProps) {
     setOpenPopover(null);
   };
 
-  const handleDownload = () => {
-    handleClosePopover();
-    console.log('DOWNLOAD', row.id);
-  };
-
-  const handlePrint = () => {
-    handleClosePopover();
-    console.log('PRINT', row.id);
-  };
-
-  const handleShare = () => {
-    handleClosePopover();
-    console.log('SHARE', row.id);
-  };
-
   const handleDelete = () => {
     handleClosePopover();
     console.log('DELETE', row.id);
@@ -134,20 +109,21 @@ function BookingDetailsRow({ row }: BookingDetailsRowProps) {
       <TableRow>
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={row.name} src={row.avatar} />
-            <Typography variant="subtitle2">{row.name}</Typography>
+            <Avatar alt={row.fullName} src={row.avatar} />
+            <Typography variant="subtitle2">{row.fullName}</Typography>
           </Stack>
         </TableCell>
 
-        <TableCell>{format(new Date(row.checkIn), 'dd MMM yyyy')}</TableCell>
+        <TableCell>$ {row.amount}</TableCell>
+        <TableCell>{row.network}</TableCell>
 
-        <TableCell>{format(new Date(row.checkOut), 'dd MMM yyyy')}</TableCell>
+        <TableCell>{textEllipsis(row.address)}</TableCell>
+        <TableCell>{new Date(row.createdAt * 1000).toLocaleDateString()}</TableCell>
 
         <TableCell>
           <Label
             variant={isLight ? 'soft' : 'filled'}
             color={
-              (row.status === 'paid' && 'success') ||
               (row.status === 'pending' && 'warning') ||
               'error'
             }
@@ -156,42 +132,36 @@ function BookingDetailsRow({ row }: BookingDetailsRowProps) {
           </Label>
         </TableCell>
 
-        <TableCell>{row.current_level}</TableCell>
-        <TableCell>{row.dream_level}</TableCell>
-
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
         </TableCell>
       </TableRow>
-
       <MenuPopover
         open={openPopover}
         onClose={handleClosePopover}
         arrow="right-top"
-        sx={{ width: 160 }}
+        sx={{ width: 140 }}
       >
-        <MenuItem onClick={handleDownload}>
-          <Iconify icon="eva:download-fill" />
-          Download
-        </MenuItem>
-
-        <MenuItem onClick={handlePrint}>
-          <Iconify icon="eva:printer-fill" />
-          Print
-        </MenuItem>
-
-        <MenuItem onClick={handleShare}>
-          <Iconify icon="eva:share-fill" />
-          Share
-        </MenuItem>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+        <MenuItem
+          onClick={() => {
+            handleDelete();
+            handleClosePopover();
+          }}
+          sx={{ color: 'error.main' }}
+        >
           <Iconify icon="eva:trash-2-outline" />
           Delete
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            router.push(`/dashboard/rewards/${row.id}/update`);
+          }}
+        >
+          <Iconify icon="mdi:update" />
+          Update
         </MenuItem>
       </MenuPopover>
     </>

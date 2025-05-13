@@ -10,7 +10,7 @@ export const _bookings = [...Array(5)].map((_, index) => ({
   checkIn: _mock.time(index),
   checkOut: _mock.time(index),
   current_level: _mock.current_level(index),
-  dream_level: _mock.dream_level(index),
+  level: _mock.dream_level(index),
   status: randomInArray(['pending', 'un_paid', 'paid']),
 }));
 

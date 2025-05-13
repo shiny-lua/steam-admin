@@ -14,7 +14,7 @@ import DashboardLayout from '../../../../layouts/dashboard';
 import { useSettingsContext } from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
-import SendProfit from '../../../../sections/@dashboard/claims/SendProfit';
+import SendProfit from '../../../../sections/@dashboard/rewards/SendProfit';
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ export default function UserEditPage() {
   return (
     <>
       <Head>
-        <title> Claim: Send profit | Steamupgrade Admin Dashboard</title>
+        <title> Reward: Send profit | Steamupgrade Admin Dashboard</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -46,8 +46,8 @@ export default function UserEditPage() {
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Claim',
-              href: PATH_DASHBOARD.claims.list,
+              name: 'Reward',
+              href: PATH_DASHBOARD.rewards.list,
             },
             { name: "Transfor" },
           ]}

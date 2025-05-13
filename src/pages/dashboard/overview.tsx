@@ -3,8 +3,6 @@ import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Container, Grid, Button } from '@mui/material';
-// auth
-import { useAuthContext } from '../../auth/useAuthContext';
 // layouts
 import DashboardLayout from '../../layouts/dashboard';
 // _mock_
@@ -13,6 +11,7 @@ import {
   _ecommerceSalesOverview,
   _ecommerceBestSalesman,
   _ecommerceLatestProducts,
+  _bookings,
 } from '../../_mock/arrays';
 // components
 import { useSettingsContext } from '../../components/settings';
@@ -20,15 +19,14 @@ import { useSettingsContext } from '../../components/settings';
 import {
   EcommerceYearlySales,
   EcommerceBestSalesman,
-  EcommerceSaleByGender,
   EcommerceWidgetSummary,
-  EcommerceSalesOverview,
-  EcommerceCurrentBalance,
 } from '../../sections/@dashboard/general/overview';
 import { AppWidgetSummary } from '../../sections/@dashboard/general/app';
 import { AnalyticsWebsiteVisits } from 'src/sections/@dashboard/general/analytics';
-import { BookingWidgetSummary } from 'src/sections/@dashboard/general/booking';
+import { BookingDetails, BookingRoomAvailable, BookingWidgetSummary } from 'src/sections/@dashboard/general/booking';
 import { BookingIllustration, CheckInIllustration, CheckOutIllustration } from 'src/assets/illustrations';
+import { useEffect, useState } from 'react';
+import axios from 'src/utils/axios';
 
 
 GeneralEcommercePage.getLayout = (page: React.ReactElement) => (
@@ -38,11 +36,33 @@ GeneralEcommercePage.getLayout = (page: React.ReactElement) => (
 // ----------------------------------------------------------------------
 
 export default function GeneralEcommercePage() {
-  const { user } = useAuthContext();
 
   const theme = useTheme();
 
   const { themeStretch } = useSettingsContext();
+
+  const [status, setStatus] = useState({
+    totalUsers: 0,
+    totalOrders: 0,
+    totalRewardRequests: 0,
+    totalPendingRewards: 0,
+    totalAcceptedRewards: 0,
+    visitStats: [],
+    bestCustomers: [],
+    yearlySales: [],
+    monthlySales: [],
+    rewardRequests: [],
+    userStats: [],
+    orderStats: [],
+  } as IOverviewStatus);
+
+  useEffect(() => {
+    const fetchTotalUsers = async () => {
+      const res = await axios.post('get-overview-stats');
+      setStatus(res.data);
+    };
+    fetchTotalUsers();
+  }, []);
 
   return (
     <>
@@ -56,10 +76,10 @@ export default function GeneralEcommercePage() {
             <AppWidgetSummary
               title="Total Users"
               percent={2.6}
-              total={18765}
+              total={status.totalUsers}
               chart={{
                 colors: [theme.palette.primary.main],
-                series: [100],
+                series: status.userStats?.map((user: { _id: string, count: number }) => user.count),
               }}
             />
           </Grid>
@@ -69,91 +89,64 @@ export default function GeneralEcommercePage() {
             <EcommerceWidgetSummary
               title="Total Orders"
               percent={2.6}
-              total={765}
+              total={status.totalOrders}
               chart={{
                 colors: [theme.palette.primary.main],
-                series: [22, 8, 35, 50, 82, 84, 77, 12, 87, 43],
+                series: status.orderStats?.map((order: { _id: string, count: number }) => order.count),
               }}
             />
           </Grid>
 
           <Grid item xs={12} md={4}>
             <BookingWidgetSummary
-              title="Total Ordering"
-              total={714000}
+              title="Total Reward claim Requests"
+              total={status.totalRewardRequests}
               icon={<BookingIllustration />}
             />
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <BookingWidgetSummary title="Check In" total={311000} icon={<CheckInIllustration />} />
+            <BookingWidgetSummary title="Pending" total={status.totalPendingRewards} icon={<CheckInIllustration />} />
           </Grid>
 
           <Grid item xs={12} md={4}>
             <BookingWidgetSummary
-              title="Check Out"
-              total={124000}
+              title="Accepted"
+              total={status.totalAcceptedRewards}
               icon={<CheckOutIllustration />}
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} md={8} xl={9}>
             <AnalyticsWebsiteVisits
               title="Website Visits"
               subheader="(+43%) than last year"
               chart={{
-                labels: [
-                  '01-1-2025',
-                  '02-1-2025',
-                  '03-1-2025',
-                  '04-1-2025',
-                  '05-1-2025',
-                  '06-1-2025',
-                  '07-1-2025',
-                  '08-1-2025',
-                  '09-1-2025',
-                  '10-1-2025',
-                  '11-1-2025',
-                ],
+                labels: status.visitStats?.map((visit: { _id: string, totalSales: number }) => `${visit._id}-01`),
                 series: [
                   {
                     name: 'visiters',
                     type: 'area',
                     fill: 'gradient',
-                    data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+                    data: status.visitStats?.map((visit: { _id: string, totalSales: number }) => visit.totalSales),
                   },
                 ],
               }}
             />
           </Grid>
 
-          <Grid item xs={12} md={12}>
-            <EcommerceBestSalesman
-              title="Best Customers"
-              tableData={_ecommerceBestSalesman}
-              tableLabels={[
-                { id: 'customer', label: 'Customer' },
-                { id: 'level', label: 'Level' },
-                { id: 'total', label: 'Total' },
-                { id: 'rank', label: 'Rank', align: 'right' },
-              ]}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <EcommerceSaleByGender
-              title="Sale By Payment"
-              total={2324}
+          <Grid item xs={12} md={4} xl={3}>
+            <BookingRoomAvailable
+              title="Items Available"
               chart={{
                 series: [
-                  { label: 'Crypto', value: 44 },
-                  { label: 'Card', value: 75 },
+                  { label: 'Sold out', value: 120 },
+                  { label: 'Available', value: 66 },
                 ],
               }}
             />
           </Grid>
-
-          <Grid item xs={12} md={6} lg={8}>
+          <Grid item xs={12}>
             <EcommerceYearlySales
               title="Yearly Sales"
               subheader="(+43%) than last year"
@@ -161,19 +154,44 @@ export default function GeneralEcommercePage() {
                 categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
                 series: [
                   {
-                    year: '2024',
-                    data: [
-                      { name: 'Total Income', data: [10, 41, 35, 151, 49, 62, 69, 91, 48] },
-                    ],
-                  },
-                  {
                     year: '2025',
                     data: [
-                      { name: 'Total Income', data: [148, 91, 69, 62, 49, 51, 35, 41, 10] },
+                      {
+                        name: 'Total Income',
+                        data: Array(parseInt(status.monthlySales[0]?._id.split("-")[status.monthlySales[0]?._id.split("-").length - 1] || '0', 10)).fill(0).concat(status.monthlySales?.map((sale) => sale.totalSales) || [0, 0])
+                      }
                     ],
                   },
                 ],
               }}
+            />
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <EcommerceBestSalesman
+              title="Top Orders"
+              tableData={status.bestCustomers}
+              tableLabels={[
+                { id: 'customer', label: 'Customer' },
+                { id: 'level', label: 'Level' },
+                { id: 'total', label: 'Total Spent' },
+                { id: 'rank', label: 'Rank', align: 'right' },
+              ]}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <BookingDetails
+              title="Reward Requests Awaiting Acceptance"
+              tableData={status.rewardRequests}
+              tableLabels={[
+                { id: 'user', label: 'User', align: 'left' },
+                { id: 'amount', label: 'Amount' },
+                { id: 'network', label: 'Network' },
+                { id: 'address', label: 'Address' },
+                { id: 'date', label: 'Date' },
+                { id: 'status', label: 'Status' },
+                { id: '' },
+              ]}
             />
           </Grid>
         </Grid>

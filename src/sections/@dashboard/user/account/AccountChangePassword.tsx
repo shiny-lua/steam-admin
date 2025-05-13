@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import * as Yup from 'yup';
 // form
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -5,19 +6,17 @@ import { useForm } from 'react-hook-form';
 // @mui
 import { Stack, Card } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-// @types
-import { IUserAccountChangePassword } from '../../../../@types/user';
 // components
 import Iconify from '../../../../components/iconify';
 import { useSnackbar } from '../../../../components/snackbar';
 import FormProvider, { RHFTextField } from '../../../../components/hook-form';
+import axios from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
-type FormValuesProps = IUserAccountChangePassword;
-
 export default function AccountChangePassword() {
   const { enqueueSnackbar } = useSnackbar();
+  const [isLoading, setIsLoading] = useState(false);
 
   const ChangePassWordSchema = Yup.object().shape({
     oldPassword: Yup.string().required('Old Password is required'),
@@ -32,15 +31,13 @@ export default function AccountChangePassword() {
     confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword')], 'Passwords must match'),
   });
 
-  const defaultValues = {
-    oldPassword: '',
-    newPassword: '',
-    confirmNewPassword: '',
-  };
-
   const methods = useForm({
     resolver: yupResolver(ChangePassWordSchema),
-    defaultValues,
+    defaultValues: {
+      oldPassword: '',
+      newPassword: '',
+      confirmNewPassword: '',
+    },
   });
 
   const {
@@ -49,14 +46,28 @@ export default function AccountChangePassword() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async (data: FormValuesProps) => {
+  const onSubmit = async (data: { oldPassword: string; newPassword: string; confirmNewPassword: string }) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar('Update success!');
-      console.log('DATA', data);
-    } catch (error) {
-      console.error(error);
+      setIsLoading(true);
+
+      const response = await axios.post('change-password', {
+        oldPassword: data.oldPassword,
+        newPassword: data.newPassword,
+        confirmNewPassword: data.confirmNewPassword,
+      });
+
+      if (response.status === 200) {
+        enqueueSnackbar('Password updated successfully!', { variant: 'success' });
+        reset();
+      }
+    } catch (error: any) {
+      console.error('Error changing password:', error);
+      enqueueSnackbar(
+        error.response?.data?.message || 'Failed to update password. Please try again.',
+        { variant: 'error' }
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -64,12 +75,18 @@ export default function AccountChangePassword() {
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Card>
         <Stack spacing={3} alignItems="flex-end" sx={{ p: 3 }}>
-          <RHFTextField name="oldPassword" type="password" label="Old Password" />
+          <RHFTextField
+            name="oldPassword"
+            type="password"
+            label="Old Password"
+            autoComplete="current-password"
+          />
 
           <RHFTextField
             name="newPassword"
             type="password"
             label="New Password"
+            autoComplete="new-password"
             helperText={
               <Stack component="span" direction="row" alignItems="center">
                 <Iconify icon="eva:info-fill" width={16} sx={{ mr: 0.5 }} /> Password must be
@@ -78,9 +95,18 @@ export default function AccountChangePassword() {
             }
           />
 
-          <RHFTextField name="confirmNewPassword" type="password" label="Confirm New Password" />
+          <RHFTextField
+            name="confirmNewPassword"
+            type="password"
+            label="Confirm New Password"
+            autoComplete="new-password"
+          />
 
-          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+          <LoadingButton
+            loading={isLoading || isSubmitting}
+            type="submit"
+            variant="contained"
+          >
             Save Changes
           </LoadingButton>
         </Stack>

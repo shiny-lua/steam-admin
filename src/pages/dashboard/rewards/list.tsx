@@ -34,11 +34,11 @@ import {
   TablePaginationCustom,
 } from '../../../components/table';
 // sections
-import { ClaimTableRow } from '../../../sections/@dashboard/claims/list';
+import { RewardTableRow } from '../../../sections/@dashboard/rewards/list';
 import axios from '../../../utils/axios';
 
 const TABLE_HEAD = [
-  { id: 'claimId', label: 'Claim ID', align: 'left' },
+  { id: 'rewardId', label: 'Reward ID', align: 'left' },
   { id: 'fullName', label: 'Full Name', align: 'left' },
   { id: 'amount', label: 'Profit Amount', align: 'right' },
   { id: 'address', label: 'Wallet Address', align: 'center' },
@@ -74,7 +74,7 @@ export default function ClaimListPage() {
 
   const { push } = useRouter();
 
-  const [claims, setClaims] = useState<IClaim[]>([]);
+  const [rewards, setRewards] = useState<IReward[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -84,17 +84,17 @@ export default function ClaimListPage() {
     try {
       setIsLoading(true);
       setError('');
-      const res = await axios.post('get-claim-list', {
+      const res = await axios.post('get-reward-list', {
         page,
         limit: rowsPerPage,
       });
       if (res.status === 200) {
-        setClaims(res.data.claimsData);
+        setRewards(res.data.rewardsData);
       } else {
         setError(res.data.message);
       }
     } catch (err) {
-      setError('Failed to fetch claim list');
+      setError('Failed to fetch reward list');
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -118,10 +118,10 @@ export default function ClaimListPage() {
   const handleDeleteRow = async (id: string) => {
     try {
       await axios.post(`delete-user/${id}`);
-      setClaims((prevClaims) => prevClaims.filter((claim) => claim.id !== id));
+      setRewards((prevRewards) => prevRewards.filter((reward) => reward.id !== id));
       setSelected([]);
       
-      if (page > 0 && claims.length - 1 <= page * rowsPerPage) {
+      if (page > 0 && rewards.length - 1 <= page * rowsPerPage) {
         setPage(page - 1);
       }
     } catch (err) {
@@ -133,11 +133,11 @@ export default function ClaimListPage() {
   const handleDeleteRows = async (selectedIds: string[]) => {
     try {
       await Promise.all(selectedIds.map((id) => axios.post(`delete-user/${id}`)));
-      setClaims((prevClaims) => prevClaims.filter((claim) => !selectedIds.includes(claim.id)));
+      setRewards((prevRewards) => prevRewards.filter((reward) => !selectedIds.includes(reward.id)));
       setSelected([]);
       handleCloseConfirm();
       
-      if (page > 0 && claims.length - selectedIds.length <= page * rowsPerPage) {
+      if (page > 0 && rewards.length - selectedIds.length <= page * rowsPerPage) {
         setPage(page - 1);
       }
     } catch (err) {
@@ -148,22 +148,23 @@ export default function ClaimListPage() {
 
   // Calculate dataInPage for proper pagination
 
-  const handleSend = (id: string) => {
-    push(PATH_DASHBOARD.claims.send(id));
+  const handleUpdate = (id: string) => {
+    console.log(PATH_DASHBOARD.rewards.update(id));
+    push(PATH_DASHBOARD.rewards.update(id));
   };
 
   return (
     <>
       <Head>
-        <title> Claims: List | Steamupgrade Admin Dashboard</title>
+        <title> Rewards: List | Steamupgrade Admin Dashboard</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Claims List"
+          heading="Rewards List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Claims', href: PATH_DASHBOARD.claims.root },
+            { name: 'Rewards', href: PATH_DASHBOARD.rewards.root },
             { name: 'List' },
           ]}
           // action={
@@ -183,11 +184,11 @@ export default function ClaimListPage() {
             <TableSelectedAction
               dense={dense}
               numSelected={selected.length}
-              rowCount={claims.length}
+              rowCount={rewards.length}
               onSelectAllRows={(checked) =>
                 onSelectAllRows(
                   checked,
-                  claims.map((row) => row.id)
+                  rewards.map((row) => row.id)
                 )
               }
               action={
@@ -205,43 +206,43 @@ export default function ClaimListPage() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={claims.length}
+                  rowCount={rewards.length}
                   numSelected={selected.length}
                   onSort={onSort}
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                        claims.map((row) => row.id)
+                      rewards.map((row) => row.id)
                     )
                   }
                 />
 
                 <TableBody>
-                  {claims
+                  {rewards
                     .map((row) => (
-                      <ClaimTableRow
+                      <RewardTableRow
                         key={row.id}
                         row={row}
                         selected={selected.includes(row.id)}
                         onSelectRow={() => onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleSend(row.id)}
+                        onEditRow={() => handleUpdate(row.id)}
                       />
                     ))}
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(page, rowsPerPage, claims.length)}
+                    emptyRows={emptyRows(page, rowsPerPage, rewards.length)}
                   />
 
-                  <TableNoData isNotFound={!isLoading && claims.length === 0} />
+                  <TableNoData isNotFound={!isLoading && rewards.length === 0} />
                 </TableBody>
               </Table>
             </Scrollbar>
           </TableContainer>
 
           <TablePaginationCustom
-            count={Math.ceil(claims.length / rowsPerPage)}
+            count={Math.ceil(rewards.length / rowsPerPage)}
             page={page}
             rowsPerPage={rowsPerPage}
             onPageChange={onChangePage}

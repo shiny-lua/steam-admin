@@ -5,46 +5,45 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Link, TextField, Typography } from '@mui/material';
+import { Box, Card, Grid, Stack, Link, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import Label from '../../../components/label';
 import Image from '../../../components/image';
-import { CustomFile } from '../../../components/upload';
 import { useSnackbar } from '../../../components/snackbar';
-import FormProvider, {
-    RHFSelect,
-    RHFSwitch,
-    RHFTextField,
-    RHFUploadAvatar,
-} from '../../../components/hook-form';
+import FormProvider from '../../../components/hook-form';
 import axios from '../../../utils/axios';
 import { FormValuesProps } from '../blog/BlogNewPostForm';
 import { textEllipsis } from 'src/utils/utils';
-import { width } from '@mui/system';
 import Iconify from 'src/components/iconify';
-// ----------------------------------------------------------------------
 
-export default function SendProfit() {
+export default function SendReward() {
     const { push, query } = useRouter();
     const { enqueueSnackbar } = useSnackbar();
 
-    const [claim, setClaim] = useState({} as IClaim)
+    const [reward, setReward] = useState({} as IReward)
     const [isCopied, setCopied] = useState(false)
 
     const methods = useForm<FormValuesProps>({});
 
     const { handleSubmit } = methods;
+    const [loading, setLoading] = useState(false);
 
     const onSubmit = async (data: FormValuesProps) => {
         try {
-            await new Promise((resolve) => setTimeout(resolve, 500));
-            push(PATH_DASHBOARD.user.list);
-            console.log('DATA', data);
-        } catch (error) {
-            console.error(error);
+            setLoading(true);
+            const res = await axios.post('update-reward', { id: reward.id, status: reward.status });
+            if (res.status === 200) {
+                enqueueSnackbar('Reward updated successfully', { variant: 'success' });
+            }
+        } catch (err) {
+            console.error(err);
+            enqueueSnackbar('Failed to update reward', { variant: 'error' });
+        } finally {
+            setLoading(false);
         }
+
     };
 
     const onCopy = async (text: string) => {
@@ -58,52 +57,46 @@ export default function SendProfit() {
         }
     }
 
-    const fetchClaim = async () => {
+    const fetchReward = async () => {
         try {
-            const claimId = query.id;
-            console.log(claimId)
-            if (!claimId) {
-                enqueueSnackbar('No claim ID provided', { variant: 'error' });
-                return;
-            }
-
-            const res = await axios.post('get-claim', { id: claimId });
+            const rewardId = query.id;
+            const res = await axios.post('get-reward', { id: rewardId });
 
             if (res.status === 200) {
-                setClaim(res.data.claimsData);
+                setReward(res.data.rewardData);
             }
         } catch (err) {
             console.error(err);
-            enqueueSnackbar('Failed to fetch claim', { variant: 'error' });
+            // enqueueSnackbar('Failed to fetch reward', { variant: 'error' });
         }
     };
 
     useEffect(() => {
-        fetchClaim();
+        fetchReward();
     }, [query.id]);
-    
+
     return (
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
 
                 <Grid item xs={12} md={4}>
-                    <Link href={`https://steamcommunity.com/profiles/${claim.userId}`} target="_blank" rel="noopener">
+                    <Link href={`https://steamcommunity.com/profiles/${reward.userId}`} target="_blank" rel="noopener">
                         <Card sx={{ py: 3, px: 3 }}>
-                            <Box display={'flex'} flexDirection={'column'} gap={5} md={{ mx: 4 }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5, mx: { md: 4 } }}>
                                 <Box sx={{
                                     borderRadius: "50%",
-                                    borderStyle: claim.avatar ? 'dashed' : "none",
+                                    borderStyle: reward.avatar ? 'dashed' : "none",
                                     borderColor: 'gray',
                                     p: 0.5
                                 }}>
                                     <Image
                                         visibleByDefault
-                                        alt={claim.fullName}
-                                        src={claim.avatar}
+                                        alt={reward.fullName}
+                                        src={reward.avatar}
                                         sx={{ borderRadius: 50 }}
                                     />
                                 </Box>
-                                {claim.fullName && <Label color="primary" sx={{ py: 2, fontSize: 15, cursor: "pointer" }}>{claim.fullName}</Label>}
+                                {reward.fullName && <Label color="primary" sx={{ py: 2, fontSize: 15, cursor: "pointer" }}>{reward.fullName}</Label>}
                             </Box>
                         </Card>
                     </Link>
@@ -116,13 +109,13 @@ export default function SendProfit() {
                                 <Typography variant="body1" color={'gray'} gutterBottom>ID</Typography>
                             </Grid>
                             <Grid item xs={12} sm={9}>
-                                <Typography variant="body1" gutterBottom>{claim.id}</Typography>
+                                <Typography variant="body1" gutterBottom>{reward.id}</Typography>
                             </Grid>
                             <Grid item xs={12} sm={3}>
                                 <Typography variant="body1" color={'gray'} gutterBottom>Profit Amount</Typography>
                             </Grid>
                             <Grid item xs={12} sm={9}>
-                                <Typography variant="body1" gutterBottom>$ {claim.amount}</Typography>
+                                <Typography variant="body1" gutterBottom>$ {reward.amount}</Typography>
                             </Grid>
                             <Grid item xs={12} sm={3}>
                                 <Typography variant="body1" color={'gray'} gutterBottom>To Address</Typography>
@@ -130,13 +123,13 @@ export default function SendProfit() {
                             <Grid item xs={12} sm={9}>
                                 <Box display={'flex'} gap={1} alignItems="flex-start">
                                     <Typography variant="body1" gutterBottom>
-                                        {textEllipsis(claim.address)}
+                                        {textEllipsis(reward.address)}
                                     </Typography>
                                     <Iconify
                                         icon={isCopied ? "mdi:checkbox-marked-outline" : "mdi:checkbox-multiple-blank-outline"}
                                         width={isCopied ? 22 : 20}
                                         sx={{ cursor: 'pointer' }}
-                                        onClick={() => onCopy(claim.address)}
+                                        onClick={() => onCopy(reward.address)}
                                     />
                                 </Box>
                             </Grid>
@@ -144,24 +137,33 @@ export default function SendProfit() {
                                 <Typography variant="body1" color={'gray'} gutterBottom>Network</Typography>
                             </Grid>
                             <Grid item xs={12} sm={9}>
-                                <Typography variant="body1" gutterBottom>{claim.network}</Typography>
+                                <Typography variant="body1" gutterBottom>{reward.network}</Typography>
                             </Grid>
-                            <Grid item xs={12} sm={3}>
+                            <Grid item xs={12} sm={3} sx={{ display: 'flex', alignItems: 'center' }}>
                                 <Typography variant="body1" color={'gray'} gutterBottom>Status</Typography>
                             </Grid>
                             <Grid item xs={12} sm={9}>
-                                <Label color={(claim.status === 'failed' && 'error') || (claim.status === 'pending' && 'warning') || (claim.status === 'expired' && 'info') || 'success'}>{claim.status}</Label>
+                                <FormControl sx={{ minWidth: 120 }} size="small">
+                                    <Select
+                                        value={reward.status || 'pending'}
+                                        onChange={(e) => setReward({ ...reward, status: e.target.value })}
+                                    >
+                                        <MenuItem value="pending">Pending</MenuItem>
+                                        <MenuItem value="cancelled">Cancelled</MenuItem>
+                                        <MenuItem value="accepted">Accepted</MenuItem>
+                                    </Select>
+                                </FormControl>
                             </Grid>
                             <Grid item xs={12} sm={3}>
                                 <Typography variant="body1" color={'gray'} gutterBottom>Date</Typography>
                             </Grid>
                             <Grid item xs={12} sm={9}>
-                                <Typography variant="body1" gutterBottom>{new Date(claim.updatedAt * 1000).toLocaleDateString()}</Typography>
+                                <Typography variant="body1" gutterBottom>{new Date(reward.updatedAt * 1000).toLocaleDateString()}</Typography>
                             </Grid>
                         </Grid>
 
                         <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-                            <LoadingButton sx={{display: 'flex', justifyContent: 'center', gap: 1}}  type="submit" variant="contained">
+                            <LoadingButton loading={loading} sx={{ display: 'flex', justifyContent: 'center', gap: 1 }} type="submit" variant="contained">
                                 <Typography variant="body1">Send</Typography>
                                 <Iconify
                                     icon="mdi:send-outline"

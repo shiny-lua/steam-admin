@@ -15,7 +15,7 @@ type Props = {
   onFilterRole: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function ClaimTableToolbar({
+export default function RewardTableToolbar({
   isFiltered,
   filterName,
   filterRole,

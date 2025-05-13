@@ -28,7 +28,7 @@ interface Props extends CardProps {
 export default function EcommerceYearlySales({ title, subheader, chart, ...other }: Props) {
   const { colors, categories, series, options } = chart;
 
-  const [seriesData, setSeriesData] = useState('2024');
+  const [seriesData, setSeriesData] = useState('2025');
 
   const chartOptions = useChart({
     colors,

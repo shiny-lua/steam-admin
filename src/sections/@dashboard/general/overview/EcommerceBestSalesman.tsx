@@ -36,7 +36,7 @@ type RowProps = {
 interface Props extends CardProps {
   title?: string;
   subheader?: string;
-  tableData: RowProps[];
+  tableData: IBestCustomer[];
   tableLabels: any;
 }
 
@@ -57,8 +57,8 @@ export default function EcommerceBestSalesman({
             <TableHeadCustom headLabel={tableLabels} />
 
             <TableBody>
-              {tableData.map((row) => (
-                <EcommerceBestSalesmanRow key={row.id} row={row} />
+              {tableData.map((row, index) => (
+                <EcommerceBestSalesmanRow key={index} index={index} row={row} />
               ))}
             </TableBody>
           </Table>
@@ -68,44 +68,37 @@ export default function EcommerceBestSalesman({
   );
 }
 
-// ----------------------------------------------------------------------
-
-type EcommerceBestSalesmanRowProps = {
-  row: RowProps;
-};
-
-function EcommerceBestSalesmanRow({ row }: EcommerceBestSalesmanRowProps) {
+function EcommerceBestSalesmanRow({ row, index }: { row: IBestCustomer, index: number }) {
   return (
     <TableRow>
       <TableCell>
         <Stack direction="row" alignItems="center">
-          <Avatar alt={row.name} src={row.avatar} />
+          <Avatar alt={row.fullName} src={row.avatar} />
 
           <Box sx={{ ml: 2 }}>
-            <Typography variant="subtitle2"> {row.name} </Typography>
+            <Typography variant="subtitle2"> {row.fullName} </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {row.email}
+              {row._id}
             </Typography>
           </Box>
         </Stack>
       </TableCell>
 
-      <TableCell>{row.category}</TableCell>
-
-      <TableCell>{fCurrency(row.total)}</TableCell>
+      <TableCell>{row.level}</TableCell>
+      <TableCell>$ {row.totalSpent || '0'}</TableCell>
 
       <TableCell align="right">
         <Label
           variant="soft"
           color={
-            (row.rank === 'Top 1' && 'primary') ||
-            (row.rank === 'Top 2' && 'info') ||
-            (row.rank === 'Top 3' && 'success') ||
-            (row.rank === 'Top 4' && 'warning') ||
+            (index === 0 && 'primary') ||
+            (index === 1 && 'info') ||
+            (index === 2 && 'success') ||
+            (index === 3 && 'warning') ||
             'error'
           }
         >
-          {row.rank}
+          {index + 1}
         </Label>
       </TableCell>
     </TableRow>

@@ -32,7 +32,7 @@ const OPTIONS = [
 export default function AccountPopover() {
   const { replace, push } = useRouter();
 
-  const { user, logout } = useAuthContext();
+  const { logout } = useAuthContext();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -57,11 +57,6 @@ export default function AccountPopover() {
     }
   };
 
-  const handleClickItem = (path: string) => {
-    handleClosePopover();
-    push(path);
-  };
-
   return (
     <>
       <IconButtonAnimate
@@ -81,29 +76,25 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <CustomAvatar src={user?.photoURL} alt={user?.displayName} name={user?.displayName} />
+        <CustomAvatar src={"/assets/images/admin.png"} alt={'admin'} name={'admin'} />
       </IconButtonAnimate>
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 200, p: 0 }}>
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.displayName}
+            Admin
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user?.email}
+            admin@steamupgrade.com
           </Typography>
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <Stack sx={{ p: 1 }}>
-          {OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={() => handleClickItem(option.linkTo)}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Stack>
+        <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
+          Change Password
+        </MenuItem>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 

@@ -49,6 +49,9 @@ export const PATH_DASHBOARD = {
     ordering: path(ROOTS_DASHBOARD, '/ordering'),
     file: path(ROOTS_DASHBOARD, '/file'),
   },
+  admin: {
+    changePassword: path(ROOTS_DASHBOARD, '/admin/change-password'),
+  },
   user: {
     root: path(ROOTS_DASHBOARD, '/user'),
     new: path(ROOTS_DASHBOARD, '/user/new'),
@@ -67,10 +70,10 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/orders'),
     list: path(ROOTS_DASHBOARD, '/orders/list'),
   },
-  claims: {
-    root: path(ROOTS_DASHBOARD, '/claims'),
-    list: path(ROOTS_DASHBOARD, '/claims/list'),
-    send: (id: string) => path(ROOTS_DASHBOARD, `/claims/${id}/send`),
+    rewards: {
+    root: path(ROOTS_DASHBOARD, '/rewards'),
+    list: path(ROOTS_DASHBOARD, '/rewards/list'),
+    update: (id: string) => path(ROOTS_DASHBOARD, `/rewards/${id}/update`),
   },
 };
 

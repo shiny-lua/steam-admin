@@ -24,14 +24,14 @@ import { textEllipsis } from 'src/utils/utils';
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IClaim;
+  row: IReward;
   selected: boolean;
   onEditRow: VoidFunction;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
 };
 
-export default function ClaimableRow({
+export default function RewardTableRow({
   row,
   selected,
   onEditRow,
@@ -124,8 +124,8 @@ export default function ClaimableRow({
             handleClosePopover();
           }}
         >
-          <Iconify icon="mdi:send-variant" />
-          Send
+          <Iconify icon="mdi:update" />
+          Update
         </MenuItem>
       </MenuPopover>
 

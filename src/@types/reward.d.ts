@@ -1,4 +1,4 @@
-declare interface IClaim {
+declare interface IReward {
     id:         string
     fullName:   string
     avatar:     string;
