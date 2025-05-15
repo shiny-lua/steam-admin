@@ -35,7 +35,6 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 // redux
-import { store } from '../redux/store';
 // utils
 import createEmotionCache from '../utils/createEmotionCache';
 // theme
@@ -82,25 +81,23 @@ export default function MyApp(props: MyAppProps) {
       </Head>
 
       <AuthProvider>
-        <ReduxProvider store={store}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <SettingsProvider>
-              <MotionLazyContainer>
-                <ThemeProvider>
-                  <ThemeSettings>
-                    <ThemeLocalization>
-                      <SnackbarProvider>
-                        <StyledChart />
-                        <ProgressBar />
-                        {getLayout(<Component {...pageProps} />)}
-                      </SnackbarProvider>
-                    </ThemeLocalization>
-                  </ThemeSettings>
-                </ThemeProvider>
-              </MotionLazyContainer>
-            </SettingsProvider>
-          </LocalizationProvider>
-        </ReduxProvider>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <SettingsProvider>
+            <MotionLazyContainer>
+              <ThemeProvider>
+                <ThemeSettings>
+                  <ThemeLocalization>
+                    <SnackbarProvider>
+                      <StyledChart />
+                      <ProgressBar />
+                      {getLayout(<Component {...pageProps} />)}
+                    </SnackbarProvider>
+                  </ThemeLocalization>
+                </ThemeSettings>
+              </ThemeProvider>
+            </MotionLazyContainer>
+          </SettingsProvider>
+        </LocalizationProvider>
       </AuthProvider>
     </CacheProvider>
   );

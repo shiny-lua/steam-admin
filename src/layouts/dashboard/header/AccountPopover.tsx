@@ -21,10 +21,6 @@ const OPTIONS = [
     label: 'Home',
     linkTo: '/',
   },
-  {
-    label: 'Settings',
-    linkTo: PATH_DASHBOARD.user.account,
-  },
 ];
 
 // ----------------------------------------------------------------------

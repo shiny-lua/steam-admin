@@ -14,7 +14,6 @@ import Image from '../../../components/image';
 import { useSnackbar } from '../../../components/snackbar';
 import FormProvider from '../../../components/hook-form';
 import axios from '../../../utils/axios';
-import { FormValuesProps } from '../blog/BlogNewPostForm';
 import { textEllipsis } from 'src/utils/utils';
 import Iconify from 'src/components/iconify';
 
@@ -25,12 +24,12 @@ export default function SendReward() {
     const [reward, setReward] = useState({} as IReward)
     const [isCopied, setCopied] = useState(false)
 
-    const methods = useForm<FormValuesProps>({});
+    const methods = useForm<any>({});
 
     const { handleSubmit } = methods;
     const [loading, setLoading] = useState(false);
 
-    const onSubmit = async (data: FormValuesProps) => {
+    const onSubmit = async (data: any) => {
         try {
             setLoading(true);
             const res = await axios.post('update-reward', { id: reward.id, status: reward.status });

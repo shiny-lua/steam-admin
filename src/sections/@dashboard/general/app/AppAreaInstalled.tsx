@@ -28,7 +28,7 @@ interface Props extends CardProps {
 export default function AppAreaInstalled({ title, subheader, chart, ...other }: Props) {
   const { colors, categories, series, options } = chart;
 
-  const [seriesData, setSeriesData] = useState('2024');
+  const [seriesData, setSeriesData] = useState('2019');
 
   const chartOptions = useChart({
     colors,

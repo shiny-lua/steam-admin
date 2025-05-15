@@ -11,7 +11,6 @@ import { Grid, Card, Stack, Button, Typography } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // @types
-import { IBlogNewPost } from '../../../@types/blog';
 // components
 import { useSnackbar } from '../../../components/snackbar';
 import FormProvider, {
@@ -44,7 +43,6 @@ const TAGS_OPTION = [
 
 // ----------------------------------------------------------------------
 
-export type FormValuesProps = IBlogNewPost;
 
 export default function BlogNewPostForm() {
   const { push } = useRouter();
@@ -75,7 +73,7 @@ export default function BlogNewPostForm() {
     metaKeywords: [],
   };
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm<any>({
     resolver: yupResolver(NewBlogSchema),
     defaultValues,
   });
@@ -98,14 +96,12 @@ export default function BlogNewPostForm() {
     setOpenPreview(false);
   };
 
-  const onSubmit = async (data: FormValuesProps) => {
+  const onSubmit = async (data: any) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       handleClosePreview();
       enqueueSnackbar('Post success!');
-      push(PATH_DASHBOARD.blog.posts);
-      console.log('DATA', data);
     } catch (error) {
       console.error(error);
     }

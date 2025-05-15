@@ -1,7 +1,6 @@
 // @mui
 import { Grid, Stack } from '@mui/material';
 // @types
-import { IUserProfile, IUserProfilePost } from '../../../../../@types/user';
 //
 import ProfileAbout from './ProfileAbout';
 import ProfilePostCard from './ProfilePostCard';
@@ -12,8 +11,8 @@ import ProfileSocialInfo from './ProfileSocialInfo';
 // ----------------------------------------------------------------------
 
 type Props = {
-  info: IUserProfile;
-  posts: IUserProfilePost[];
+  info: any;
+  posts: any;
 };
 
 export default function Profile({ info, posts }: Props) {
@@ -40,7 +39,7 @@ export default function Profile({ info, posts }: Props) {
         <Stack spacing={3}>
           <ProfilePostInput />
 
-          {posts.map((post) => (
+          {posts.map((post: any) => (
             <ProfilePostCard key={post.id} post={post} />
           ))}
         </Stack>
