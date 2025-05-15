@@ -90,15 +90,15 @@ export default function UserTableRow({
 
         <TableCell align="center">{ip}</TableCell>
 
-        <TableCell align="center">{deviceID}</TableCell>
+        <TableCell align="center" sx={{ flex: '0 0 100px' }}>{deviceID}</TableCell>
 
         <TableCell align="center">{new Date(joinedDate * 1000).toLocaleDateString()}</TableCell>
 
-        <TableCell align="right">
+        {/* <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
 
       <MenuPopover

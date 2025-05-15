@@ -88,11 +88,11 @@ export default function AffiliateTableRow({
 
         <TableCell align="right">{totalProfit}</TableCell>
 
-        <TableCell align="right">
+        {/* <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
 
       <MenuPopover

@@ -53,21 +53,27 @@ const navConfig = [
       // USER
       {
         title: 'user',
-        path: PATH_DASHBOARD.user.root,
+        path: PATH_DASHBOARD.user.list,
         icon: ICONS.user,
         children: [
           // { title: 'profile', path: PATH_DASHBOARD.user.profile },
           // { title: 'cards', path: PATH_DASHBOARD.user.cards },
           { title: 'list', path: PATH_DASHBOARD.user.list },
-          { title: 'create', path: PATH_DASHBOARD.user.new },
-          { title: 'edit', path: PATH_DASHBOARD.user.demoEdit },
-          { title: 'account', path: PATH_DASHBOARD.user.account },
+          // { title: 'create', path: PATH_DASHBOARD.user.new },
+          // { title: 'edit', path: PATH_DASHBOARD.user.demoEdit },
+          // { title: 'account', path: PATH_DASHBOARD.user.account },
         ],
       },
+
+      // {
+      //   title: 'change password',
+      //   path: PATH_DASHBOARD.admin.changePassword,
+      //   icon: ICONS.lock,
+      // },
       
       {
         title: 'affiliate',
-        path: PATH_DASHBOARD.affiliate.root,
+        path: PATH_DASHBOARD.affiliate.list,
         icon: ICONS.affiliate,
         children: [
           { title: 'list', path: PATH_DASHBOARD.affiliate.list },
@@ -76,7 +82,7 @@ const navConfig = [
 
       {
         title: 'orders',
-        path: PATH_DASHBOARD.orders.root,
+        path: PATH_DASHBOARD.orders.list,
         icon: ICONS.ecommerce,
         children: [
           { title: 'list', path: PATH_DASHBOARD.orders.list },
@@ -85,7 +91,7 @@ const navConfig = [
 
       {
         title: 'referral rewards',
-        path: PATH_DASHBOARD.rewards.root,
+        path: PATH_DASHBOARD.rewards.list,
         icon: ICONS.claim,
         children: [
           { title: 'list', path: PATH_DASHBOARD.rewards.list },

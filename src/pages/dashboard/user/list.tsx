@@ -13,6 +13,7 @@ import {
   Container,
   IconButton,
   TableContainer,
+  TableCell,
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';

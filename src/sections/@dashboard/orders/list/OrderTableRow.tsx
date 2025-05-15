@@ -94,11 +94,11 @@ export default function OrderTableRow({
         </TableCell>
         <TableCell align="right">{new Date(updatedAt * 1000).toLocaleDateString()}</TableCell>
 
-        <TableCell align="right">
+        {/* <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
 
       <MenuPopover

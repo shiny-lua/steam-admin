@@ -12,12 +12,12 @@ const ROOTS_DASHBOARD = '/dashboard';
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
   login: path(ROOTS_AUTH, '/login'),
-  register: path(ROOTS_AUTH, '/register'),
-  loginUnprotected: path(ROOTS_AUTH, '/login-unprotected'),
-  registerUnprotected: path(ROOTS_AUTH, '/register-unprotected'),
-  verify: path(ROOTS_AUTH, '/verify'),
-  resetPassword: path(ROOTS_AUTH, '/reset-password'),
-  newPassword: path(ROOTS_AUTH, '/new-password'),
+  // register: path(ROOTS_AUTH, '/register'),
+  // loginUnprotected: path(ROOTS_AUTH, '/login-unprotected'),
+  // registerUnprotected: path(ROOTS_AUTH, '/register-unprotected'),
+  // verify: path(ROOTS_AUTH, '/verify'),
+  // resetPassword: path(ROOTS_AUTH, '/reset-password'),
+  // newPassword: path(ROOTS_AUTH, '/new-password'),
 };
 
 export const PATH_PAGE = {
@@ -36,31 +36,31 @@ export const PATH_PAGE = {
 
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
-  kanban: path(ROOTS_DASHBOARD, '/kanban'),
-  calendar: path(ROOTS_DASHBOARD, '/calendar'),
-  fileManager: path(ROOTS_DASHBOARD, '/files-manager'),
-  permissionDenied: path(ROOTS_DASHBOARD, '/permission-denied'),
-  blank: path(ROOTS_DASHBOARD, '/blank'),
+  // kanban: path(ROOTS_DASHBOARD, '/kanban'),
+  // calendar: path(ROOTS_DASHBOARD, '/calendar'),
+  // fileManager: path(ROOTS_DASHBOARD, '/files-manager'),
+  // permissionDenied: path(ROOTS_DASHBOARD, '/permission-denied'),
+  // blank: path(ROOTS_DASHBOARD, '/blank'),
   general: {
-    app: path(ROOTS_DASHBOARD, '/app'),
+    // app: path(ROOTS_DASHBOARD, '/app'),
     overview: path(ROOTS_DASHBOARD, '/overview'),
-    analytics: path(ROOTS_DASHBOARD, '/analytics'),
-    banking: path(ROOTS_DASHBOARD, '/banking'),
-    ordering: path(ROOTS_DASHBOARD, '/ordering'),
-    file: path(ROOTS_DASHBOARD, '/file'),
+    // analytics: path(ROOTS_DASHBOARD, '/analytics'),
+    // banking: path(ROOTS_DASHBOARD, '/banking'),
+    // ordering: path(ROOTS_DASHBOARD, '/ordering'),
+    // file: path(ROOTS_DASHBOARD, '/file'),
   },
   admin: {
-    changePassword: path(ROOTS_DASHBOARD, '/admin/change-password'),
+    changePassword: path(ROOTS_DASHBOARD, '/change-password'),
   },
   user: {
     root: path(ROOTS_DASHBOARD, '/user'),
-    new: path(ROOTS_DASHBOARD, '/user/new'),
+    // new: path(ROOTS_DASHBOARD, '/user/new'),
     list: path(ROOTS_DASHBOARD, '/user/list'),
-    cards: path(ROOTS_DASHBOARD, '/user/cards'),
-    profile: path(ROOTS_DASHBOARD, '/user/profile'),
-    account: path(ROOTS_DASHBOARD, '/user/account'),
+    // cards: path(ROOTS_DASHBOARD, '/user/cards'),
+    // profile: path(ROOTS_DASHBOARD, '/user/profile'),
+    // account: path(ROOTS_DASHBOARD, '/user/account'),
     edit: (name: string) => path(ROOTS_DASHBOARD, `/user/${name}/edit`),
-    demoEdit: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
+    // demoEdit: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
   },
   affiliate: {
     root: path(ROOTS_DASHBOARD, '/affiliates'),
@@ -70,7 +70,7 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/orders'),
     list: path(ROOTS_DASHBOARD, '/orders/list'),
   },
-    rewards: {
+  rewards: {
     root: path(ROOTS_DASHBOARD, '/rewards'),
     list: path(ROOTS_DASHBOARD, '/rewards/list'),
     update: (id: string) => path(ROOTS_DASHBOARD, `/rewards/${id}/update`),

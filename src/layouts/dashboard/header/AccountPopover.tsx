@@ -92,7 +92,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
+        <MenuItem onClick={() => push(PATH_DASHBOARD.admin.changePassword)} sx={{ m: 1 }}>
           Change Password
         </MenuItem>
 
